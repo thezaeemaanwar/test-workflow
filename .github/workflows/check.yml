@@ -1,0 +1,33 @@
+name: "Custom GitHub Action"
+on: 
+  workflow_dispatch:
+    inputs:
+      num:
+        description: "Enter a number"
+        required: true
+        default: "1"
+jobs:
+  install-python:
+    name: "Install Python"
+    runs-on: ubuntu-latest
+    steps:
+      - name: "Install Python"
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.10"
+  install-dependencies:  
+    runs-on: ubuntu-latest
+    name: Install Dependencies
+    steps:
+      - name: "Install dependencies"
+        run: pip install -r requirements.txt
+  square:
+    name: "Square Input"
+    runs-on: ubuntu-latest
+    steps:
+      - name: Pass Inputs to Shell
+        run:
+          echo "INPUT_NUM=${{ inputs.num }}" >> $GITHUB_ENV
+      - name: Fetch the number's square
+        id: get-square
+        run: python src/get_num_square.py
